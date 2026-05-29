@@ -342,10 +342,10 @@
     .build-item-text h4 { font-size: 12px; font-weight: 700; color: var(--neutral-10); margin-bottom: 2px; }
     .build-item-text p { font-size: 11px; color: var(--neutral-50); line-height: 1.4; }
     .build-status { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 10px; display: inline-block; margin-top: 4px; }
-    .bs-build { background: var(--blue-light); color: var(--blue-mid); }
-    .bs-extend { background: var(--amber-light); color: var(--amber); }
-    .bs-new { background: var(--scout-purple-light); color: var(--scout-purple); }
-    .bs-infra { background: #e0f2f1; color: var(--strk-teal); }
+    .bs-build { background: var(--neutral-95); color: var(--neutral-50); border: 1px solid var(--neutral-80); }
+    .bs-extend { background: var(--neutral-95); color: var(--neutral-50); border: 1px solid var(--neutral-80); }
+    .bs-new { background: var(--neutral-95); color: var(--neutral-50); border: 1px solid var(--neutral-80); }
+    .bs-infra { background: var(--neutral-95); color: var(--neutral-50); border: 1px solid var(--neutral-80); }
 
     /* OPEN QUESTIONS */
     .oq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
@@ -374,7 +374,7 @@
   <a href="#scout-compass">Scout + Compass</a>
   <a href="#demo">Demo</a>
   <a href="#learning">How It Learns</a>
-  <a href="#build">What to Build</a>
+  <a href="#build">Approach</a>
   <a href="#questions">Open Questions</a>
   <div class="nav-badge">Concept Draft — May 2026</div>
 </nav>
@@ -1085,79 +1085,79 @@
 <!-- WHAT TO BUILD -->
 <section id="build" style="background:white;">
   <div class="page">
-    <div class="section-label">What to Build</div>
-    <h2>Scope breakdown.</h2>
-    <p class="section-intro">What is Salesforce-side, what is Scout-side, and what infrastructure needs to be set up first.</p>
+    <div class="section-label">Suggested Approach</div>
+    <h2>One way to build this.</h2>
+    <p class="section-intro">This is a starting point, not a final spec. The Salesforce-side and Scout-side pieces below represent one reasonable approach — components, graphs, and infrastructure that would likely be involved. Details will shift as we get into it.</p>
 
     <div class="build-grid">
       <div class="build-col">
-        <h3>Salesforce (LWC + Apex)</h3>
+        <h3>Salesforce side</h3>
         <div class="build-item">
           <div class="build-icon bi-blue">⚡</div>
           <div class="build-item-text">
             <h4>c-st-scout-summary (LWC)</h4>
-            <p>Embedded inline in the record page. Accepts @api recordId + @api objectApiName from the platform. Renders the summary, action chips, and follow-up entry point inline. Droppable on any flexipage via Lightning App Builder.</p>
-            <span class="build-status bs-build">Build new</span>
+            <p>A record page component that renders the summary inline. Would accept @api recordId + @api objectApiName from the platform — droppable onto any flexipage. Could live in the Engagements section or as a standalone column component.</p>
+            <span class="build-status bs-build">Likely needed</span>
           </div>
         </div>
         <div class="build-item">
           <div class="build-icon bi-blue">🔧</div>
           <div class="build-item-text">
             <h4>StScoutSummaryController (Apex)</h4>
-            <p>@AuraEnabled controller. Uses Schema.describeSObjects for field context. HTTP callout to Scout API using the StAppConfigKey credential pattern (same as StSlackAPI.cls). Returns summary text and suggested prompts.</p>
-            <span class="build-status bs-build">Build new</span>
+            <p>An @AuraEnabled controller to handle the HTTP callout to Scout. The StAppConfigKey + StSlackAPI pattern in the codebase is a close parallel — the credential and callout shape would likely look similar.</p>
+            <span class="build-status bs-build">Likely needed</span>
           </div>
         </div>
         <div class="build-item">
           <div class="build-icon bi-amber">🔑</div>
           <div class="build-item-text">
             <h4>Sitetracker_API_Keys.SCOUT_API_KEY</h4>
-            <p>Custom metadata record in the existing Sitetracker_API_Keys__mdt type. Identical pattern to SLACK_API_KEY already in the codebase.</p>
-            <span class="build-status bs-extend">Extend existing</span>
+            <p>The Scout PAT would need to live somewhere. The existing Sitetracker_API_Keys__mdt type (used for Slack today) is the obvious home — a one-record extension of an existing pattern.</p>
+            <span class="build-status bs-extend">Could extend existing</span>
           </div>
         </div>
         <div class="build-item">
           <div class="build-icon bi-amber">📋</div>
           <div class="build-item-text">
             <h4>StScoutLearningScheduler (Apex Scheduler)</h4>
-            <p>Apex job that triggers the background learning graphs once a usage threshold is crossed per object type — e.g. every 50 new summaries. Runs more frequently for high-activity objects. This is what makes the summary get smarter without anyone doing anything.</p>
-            <span class="build-status bs-build">Build new</span>
+            <p>Something would need to trigger the background learning graphs. An Apex scheduled job checking usage thresholds per object type is one option — could also be event-driven or triggered from Scout's side.</p>
+            <span class="build-status bs-build">Likely needed</span>
           </div>
         </div>
       </div>
 
       <div class="build-col">
-        <h3>Scout Platform (Graphs + Compass)</h3>
+        <h3>Scout side</h3>
         <div class="build-item">
           <div class="build-icon bi-purple">🗂</div>
           <div class="build-item-text">
             <h4>Universal Summary Graph</h4>
-            <p>New graph: context_builder → compass_query → parallel_fan_out (7 queries) → parallel_join → llm_call (summarize + prompts) → emit_artifact. Accepts record_id, object_api_name, user_role, and optional user_context. Produces the summary and suggested prompts.</p>
-            <span class="build-status bs-new">New graph</span>
+            <p>The core execution graph. A pipeline roughly shaped like: context_builder → compass_query → parallel data fetches → llm_call → emit_artifact. Inputs would include record_id, object_api_name, user_role — exact shape tbd once we're building.</p>
+            <span class="build-status bs-new">One approach</span>
           </div>
         </div>
         <div class="build-item">
           <div class="build-icon bi-purple">🧠</div>
           <div class="build-item-text">
             <h4>Object Learning Graph</h4>
-            <p>Background graph: receives object_api_name → queries recent traces → llm_call to extract patterns → writes a tuneHeader to the Compass ontology for that object → refreshes suggested prompts. Run on a schedule by the Apex scheduler.</p>
-            <span class="build-status bs-new">New graph</span>
+            <p>A background graph that analyzes usage patterns for an object type and writes a tuneHeader to Compass. Roughly: query traces → llm_call (pattern extraction) → update ontology. Could be a separate graph or part of the main one — worth discussing.</p>
+            <span class="build-status bs-new">One approach</span>
           </div>
         </div>
         <div class="build-item">
           <div class="build-icon bi-purple">👤</div>
           <div class="build-item-text">
             <h4>User Personalization Graph</h4>
-            <p>Background graph: queries traces and feedback by userId → llm_call to build user_context string → stores in Mission inputDefaults. Invoked by the scheduler per user-object combination after enough interactions.</p>
-            <span class="build-status bs-new">New graph</span>
+            <p>A background graph that builds a personal context model per user, stored in Mission inputDefaults. The exact trigger mechanism — threshold-based, scheduled, or event-driven — is something to figure out during implementation.</p>
+            <span class="build-status bs-new">One approach</span>
           </div>
         </div>
         <div class="build-item">
           <div class="build-icon bi-teal">📡</div>
           <div class="build-item-text">
             <h4>Compass Survey — STRK Objects</h4>
-            <p>Add a STRK-enabled org as a Compass connector policy. Run Magellan survey to elevate strk__Site__c, strk__Engagement__c, strk__Project__c from stub (layer 3) to fully surveyed (layer 2). Required for field-rich summaries on core STRK objects.</p>
-            <span class="build-status bs-infra">Infrastructure</span>
+            <p>For the richest summaries on core STRK objects, the Magellan survey would need to run on a STRK-enabled org. The component works without this — but the summaries would get meaningfully better once these objects are fully surveyed.</p>
+            <span class="build-status bs-infra">Would require</span>
           </div>
         </div>
       </div>
