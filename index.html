@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scout Summary — Concept</title>
+  <style>
+    :root {
+      --blue: #0176d3;
+      --blue-light: #d8edff;
+      --blue-mid: #0e51a7;
+      --green: #027e46;
+      --green-light: #ebf7e6;
+      --amber: #a36a00;
+      --amber-light: #fef7e5;
+      --red: #c23934;
+      --red-light: #fce9e9;
+      --neutral-100: #ffffff;
+      --neutral-95: #f3f2f2;
+      --neutral-90: #e5e5e5;
+      --neutral-80: #c9c7c5;
+      --neutral-70: #b0adab;
+      --neutral-50: #706e6b;
+      --neutral-20: #3e3e3c;
+      --neutral-10: #1c1c1c;
+      --scout-purple: #6b21a8;
+      --scout-purple-mid: #7c3aed;
+      --scout-purple-light: #f3e8ff;
+      --strk-teal: #00695c;
+      --strk-teal-dark: #004d40;
+      --strk-teal-mid: #00796b;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.08);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,.15), 0 4px 12px rgba(0,0,0,.08);
+      --radius: 6px;
+      --radius-lg: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, "Salesforce Sans", BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8f7f5;
+      color: var(--neutral-20);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: white; border-bottom: 1px solid var(--neutral-90);
+      padding: 0 32px; display: flex; align-items: center; gap: 32px;
+      height: 52px; box-shadow: var(--shadow-sm);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--neutral-10); }
+    .nav-logo-dot { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, var(--strk-teal), var(--scout-purple)); display: flex; align-items: center; justify-content: center; }
+    .nav-logo-dot svg { width: 12px; height: 12px; fill: white; }
+    nav a { color: var(--neutral-50); text-decoration: none; font-size: 13px; padding: 4px 0; border-bottom: 2px solid transparent; transition: all .15s; }
+    nav a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+    .nav-badge { margin-left: auto; background: var(--scout-purple-light); color: var(--scout-purple); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+
+    /* LAYOUT */
+    .page { max-width: 1160px; margin: 0 auto; padding: 0 32px; }
+
+    /* HERO */
+    .hero { padding: 72px 32px 60px; text-align: center; background: white; border-bottom: 1px solid var(--neutral-90); }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; background: var(--scout-purple-light); color: var(--scout-purple); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 20px; }
+    .hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--scout-purple); }
+    h1 { font-size: 42px; font-weight: 800; line-height: 1.15; color: var(--neutral-10); margin-bottom: 16px; letter-spacing: -0.5px; }
+    h1 span { color: var(--strk-teal); }
+    .hero-sub { font-size: 18px; color: var(--neutral-50); max-width: 620px; margin: 0 auto 32px; line-height: 1.65; }
+    .hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .tag { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid; }
+    .tag-blue { background: var(--blue-light); color: var(--blue-mid); border-color: #b8d9f5; }
+    .tag-green { background: var(--green-light); color: var(--green); border-color: #b3e3cc; }
+    .tag-amber { background: var(--amber-light); color: var(--amber); border-color: #f9d89a; }
+    .tag-purple { background: var(--scout-purple-light); color: var(--scout-purple); border-color: #dbb6fa; }
+    .tag-teal { background: #e0f2f1; color: var(--strk-teal); border-color: #80cbc4; }
+
+    /* SECTIONS */
+    section { padding: 64px 0; }
+    section + section { border-top: 1px solid var(--neutral-90); }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--neutral-50); margin-bottom: 8px; }
+    h2 { font-size: 28px; font-weight: 800; color: var(--neutral-10); margin-bottom: 12px; letter-spacing: -0.3px; }
+    .section-intro { font-size: 15px; color: var(--neutral-50); max-width: 680px; line-height: 1.65; }
+
+    /* CONCEPT — INTELLIGENCE SPECTRUM */
+    .concept-wrap { background: white; border: 1px solid var(--neutral-90); border-radius: var(--radius-lg); padding: 48px; box-shadow: var(--shadow-sm); }
+    .concept-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .intelligence-diagram { position: relative; }
+    .intel-ring { border-radius: 16px; padding: 28px; position: relative; margin-bottom: 0; }
+    .intel-ring-outer { background: #fafaf9; border: 2px dashed var(--neutral-80); }
+    .intel-ring-mid { background: #f0f7ff; border: 2px solid var(--blue); margin: 20px; border-radius: 12px; padding: 22px; }
+    .intel-ring-inner { background: var(--scout-purple-light); border: 2px solid var(--scout-purple); margin: 20px; border-radius: 10px; padding: 20px; }
+    .intel-ring-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 3px; }
+    .irl-outer { color: var(--neutral-50); }
+    .irl-mid { color: var(--blue-mid); }
+    .irl-inner { color: var(--scout-purple); }
+    .intel-ring-desc { font-size: 12px; color: var(--neutral-50); line-height: 1.4; }
+    .intel-ring-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-top: 6px; }
+    .irt-outer { background: var(--neutral-90); color: var(--neutral-50); }
+    .irt-mid { background: var(--blue-light); color: var(--blue-mid); }
+    .irt-inner { background: var(--scout-purple-light); color: var(--scout-purple); border: 1px solid #dbb6fa; }
+    .intel-axis { margin-top: 20px; }
+    .intel-axis-bar { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--neutral-80), var(--blue), var(--scout-purple)); position: relative; }
+    .intel-axis-bar::after { content: '▶'; position: absolute; right: -8px; top: -7px; color: var(--scout-purple); font-size: 11px; }
+    .intel-axis-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: var(--neutral-70); }
+    .concept-questions { display: flex; flex-direction: column; gap: 18px; }
+    .cq { background: var(--neutral-95); border-radius: var(--radius); padding: 16px 18px; border-left: 3px solid var(--strk-teal); }
+    .cq-q { font-size: 13px; font-weight: 600; color: var(--neutral-20); margin-bottom: 6px; }
+    .cq-a { font-size: 12px; color: var(--neutral-50); line-height: 1.55; }
+    .cq-a strong { color: var(--neutral-20); }
+
+    /* HOW IT WORKS */
+    .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+    .how-card { background: white; border: 1px solid var(--neutral-90); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+    .how-card-header { padding: 18px 24px 14px; border-bottom: 1px solid var(--neutral-90); display: flex; align-items: center; gap: 10px; }
+    .how-card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+    .hci-blue { background: var(--blue-light); }
+    .hci-purple { background: var(--scout-purple-light); }
+    .how-card-title { font-size: 15px; font-weight: 700; color: var(--neutral-10); }
+    .how-card-sub { font-size: 11px; color: var(--neutral-70); margin-top: 1px; }
+    .how-card-body { padding: 20px 24px; }
+    .how-card-body p { font-size: 13px; color: var(--neutral-50); line-height: 1.6; margin-bottom: 14px; }
+    .how-steps { display: flex; flex-direction: column; gap: 10px; }
+    .how-step { display: flex; align-items: flex-start; gap: 10px; }
+    .how-step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--neutral-95); border: 1px solid var(--neutral-80); font-size: 10px; font-weight: 700; color: var(--neutral-50); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .how-step-text { font-size: 12px; color: var(--neutral-20); line-height: 1.5; }
+    .how-step-text strong { color: var(--neutral-10); }
+    .how-divider { height: 1px; background: var(--neutral-90); margin: 14px 0; }
+    .schedule-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 10px; background: #e0f2f1; color: var(--strk-teal); border: 1px solid #80cbc4; margin-bottom: 10px; }
+    .schedule-badge::before { content: '⏱'; font-size: 11px; }
+
+    /* SCOUT + COMPASS SECTION */
+    .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; align-items: start; }
+    .sc-panel { background: white; border: 1px solid var(--neutral-90); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); }
+    .sc-panel-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--neutral-50); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .sc-panel-title-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+    .scpb-scout { background: var(--scout-purple-light); color: var(--scout-purple); border: 1px solid #dbb6fa; }
+    .scpb-compass { background: var(--blue-light); color: var(--blue-mid); border: 1px solid #b8d9f5; }
+
+    /* Graph nodes */
+    .graph-inputs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+    .graph-input-chip { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 10px; background: var(--neutral-95); border: 1px solid var(--neutral-80); color: var(--neutral-50); font-family: monospace; }
+    .graph-arrow { text-align: center; color: var(--neutral-70); font-size: 14px; line-height: 1; margin: 4px 0; }
+    .graph-node { border: 1px solid var(--neutral-90); border-radius: 8px; padding: 10px 13px; margin-bottom: 4px; display: flex; align-items: flex-start; gap: 9px; position: relative; }
+    .gn-context { border-color: #bbf7d0; background: #f0fdf4; }
+    .gn-compass { border-color: #bfdbfe; background: #eff6ff; border-width: 2px; }
+    .gn-fanout { border-color: #dbb6fa; background: var(--scout-purple-light); }
+    .gn-query { border-color: var(--neutral-90); background: white; }
+    .gn-join { border-color: #dbb6fa; background: var(--scout-purple-light); }
+    .gn-llm { border-color: #fde68a; background: var(--amber-light); }
+    .gn-emit { border-color: #bbf7d0; background: #f0fdf4; }
+    .gn-learn { border-color: var(--neutral-80); background: var(--neutral-95); }
+    .graph-node-badge { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; margin-top: 1px; flex-shrink: 0; }
+    .gnb-context { background: #dcfce7; color: #166534; }
+    .gnb-compass { background: #dbeafe; color: #1e40af; }
+    .gnb-fanout { background: #ede9fe; color: #5b21b6; }
+    .gnb-query { background: var(--neutral-90); color: var(--neutral-50); }
+    .gnb-join { background: #ede9fe; color: #5b21b6; }
+    .gnb-llm { background: #fef3c7; color: #92400e; }
+    .gnb-emit { background: #dcfce7; color: #166534; }
+    .graph-node-text { flex: 1; }
+    .graph-node-name { font-size: 11px; font-weight: 700; color: var(--neutral-10); margin-bottom: 2px; }
+    .graph-node-desc { font-size: 10px; color: var(--neutral-50); line-height: 1.4; }
+    .graph-node-desc em { color: var(--blue); font-style: normal; font-weight: 600; }
+    .graph-cluster { border: 1px dashed var(--neutral-80); border-radius: 8px; padding: 8px; margin-bottom: 4px; }
+    .graph-cluster-label { font-size: 9px; font-weight: 700; color: var(--neutral-70); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+    .graph-cluster-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .graph-output { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+    .graph-output-chip { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 10px; border: 1px solid #b3e3cc; background: var(--green-light); color: var(--green); }
+    .compass-connect { display: flex; align-items: center; gap: 4px; margin: 3px 0 3px 20px; }
+    .compass-connect-line { flex: 1; height: 1px; border-top: 2px dashed #bfdbfe; }
+    .compass-connect-label { font-size: 9px; color: var(--blue); font-weight: 600; white-space: nowrap; }
+
+    /* Compass ontology visualization */
+    .compass-object-card { border: 2px solid #bfdbfe; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
+    .compass-object-header { background: var(--blue); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
+    .compass-object-name { font-size: 11px; font-weight: 700; color: white; font-family: monospace; }
+    .compass-object-layer { font-size: 9px; padding: 2px 7px; background: rgba(255,255,255,.2); color: white; border-radius: 8px; font-weight: 600; }
+    .compass-object-body { padding: 10px 12px; }
+    .compass-field-row { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--neutral-95); font-size: 10px; }
+    .compass-field-row:last-child { border-bottom: none; }
+    .compass-field-name { font-weight: 600; color: var(--neutral-20); width: 110px; flex-shrink: 0; font-family: monospace; font-size: 9px; }
+    .compass-field-detail { color: var(--neutral-50); line-height: 1.4; }
+    .compass-field-type { display: inline-block; font-size: 9px; background: var(--neutral-95); padding: 0px 5px; border-radius: 3px; color: var(--neutral-50); margin-right: 4px; }
+    .compass-tune-header { margin-top: 10px; border: 1px dashed var(--strk-teal); border-radius: 6px; padding: 8px 10px; background: #e0f2f1; }
+    .compass-tune-title { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--strk-teal); margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+    .compass-tune-title span { background: var(--strk-teal); color: white; font-size: 8px; padding: 1px 5px; border-radius: 4px; }
+    .compass-tune-empty { font-size: 10px; color: var(--neutral-70); font-style: italic; }
+    .compass-tune-filled { font-size: 10px; color: var(--strk-teal-dark); line-height: 1.5; }
+    .compass-query-return { margin-top: 10px; background: var(--neutral-95); border-radius: 6px; padding: 8px 10px; }
+    .cqr-title { font-size: 9px; font-weight: 700; color: var(--neutral-50); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+    .cqr-item { font-size: 10px; color: var(--neutral-20); margin-bottom: 3px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; }
+    .cqr-item::before { content: '→'; color: var(--blue); font-size: 9px; flex-shrink: 0; margin-top: 1px; }
+    .tune-toggle { font-size: 10px; color: var(--blue); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(1,118,211,.3); margin-left: 6px; }
+
+    /* DEMO — SITETRACKER UI */
+    .demo-shell { background: white; border-radius: var(--radius-lg); border: 1px solid var(--neutral-90); box-shadow: var(--shadow-lg); overflow: hidden; margin-top: 32px; }
+
+    /* SF top bar — teal gradient matching Sitetracker */
+    .sf-topbar { background: linear-gradient(135deg, #00695c 0%, #004d40 100%); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .sf-topbar-left { display: flex; align-items: center; gap: 10px; }
+    .sf-record-type { font-size: 10px; color: rgba(255,255,255,.6); font-weight: 500; }
+    .sf-record-name { font-size: 18px; font-weight: 700; color: white; }
+    .sf-topbar-actions { display: flex; align-items: center; gap: 8px; }
+    .sf-action-btn { font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,.3); color: white; background: transparent; cursor: pointer; }
+    .sf-ask-scout-btn { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 4px; background: white; color: var(--strk-teal-dark); border: none; cursor: pointer; }
+    .sf-ask-scout-btn svg { width: 12px; height: 12px; }
+
+    /* Metadata strip */
+    .sf-meta-strip { background: #f3f2f2; padding: 8px 20px; display: flex; gap: 32px; border-bottom: 1px solid var(--neutral-90); }
+    .sf-meta-item { }
+    .sf-meta-label { font-size: 9px; font-weight: 600; color: var(--neutral-70); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 1px; }
+    .sf-meta-value { font-size: 12px; color: var(--neutral-20); font-weight: 500; }
+
+    /* Status pipeline */
+    .sf-pipeline { display: flex; padding: 0 20px; background: white; border-bottom: 1px solid var(--neutral-90); }
+    .sf-stage { flex: 1; text-align: center; padding: 8px 4px; font-size: 11px; font-weight: 600; position: relative; }
+    .sf-stage-active { background: var(--strk-teal); color: white; clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%); }
+    .sf-stage-done { background: var(--strk-teal-dark); color: rgba(255,255,255,.8); clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%); }
+    .sf-stage-todo { background: var(--neutral-90); color: var(--neutral-50); clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%); }
+    .sf-stage:first-child { clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%); }
+
+    /* Tab bar */
+    .sf-tabs { display: flex; border-bottom: 1px solid var(--neutral-90); background: white; padding: 0 20px; gap: 0; }
+    .sf-tab { padding: 10px 16px; font-size: 12px; font-weight: 500; color: var(--neutral-50); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; white-space: nowrap; }
+    .sf-tab-active { color: var(--strk-teal); border-bottom-color: var(--strk-teal); font-weight: 600; }
+
+    /* Engagements content */
+    .sf-content { padding: 16px 20px; background: #f8f7f5; }
+    .sf-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .sf-section-title { font-size: 16px; font-weight: 700; color: var(--neutral-10); }
+    .sf-refresh-btn { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--neutral-50); background: white; border: 1px solid var(--neutral-80); padding: 5px 12px; border-radius: 4px; cursor: pointer; transition: all .15s; }
+    .sf-refresh-btn:hover { border-color: var(--strk-teal); color: var(--strk-teal); }
+    .sf-refresh-btn svg { width: 12px; height: 12px; transition: transform .4s; }
+    .sf-refresh-btn.spinning svg { animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Summary box */
+    .sf-summary-box { background: white; border: 1px solid var(--neutral-90); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+    .sf-sum-meta { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid var(--neutral-95); }
+    .sf-sum-meta-left { font-size: 11px; color: var(--neutral-50); display: flex; align-items: center; gap: 6px; }
+    .sf-sum-meta-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+    .sf-sum-meta-right { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--neutral-70); }
+    .sf-sum-version { font-weight: 600; color: var(--neutral-50); }
+    .sf-sum-hide { color: var(--blue); cursor: pointer; font-weight: 500; }
+    .sf-sum-body { padding: 12px 14px; }
+    .sf-sum-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--neutral-70); margin-bottom: 8px; }
+    .sf-sum-text { font-size: 12px; color: var(--neutral-20); line-height: 1.7; }
+    .sf-sum-text a { color: var(--blue); text-decoration: underline; text-decoration-color: rgba(1,118,211,.3); cursor: pointer; }
+    .sf-sum-actions { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--neutral-95); flex-wrap: wrap; }
+    .sf-sum-action-sec { font-size: 10px; font-weight: 700; letter-spacing: .04em; padding: 6px 12px; border: 1px solid var(--neutral-80); background: white; border-radius: 3px; cursor: pointer; color: var(--neutral-20); text-transform: uppercase; transition: all .15s; }
+    .sf-sum-action-sec:hover { border-color: var(--neutral-50); }
+    .sf-sum-action-primary { font-size: 10px; font-weight: 700; letter-spacing: .04em; padding: 6px 14px; background: var(--neutral-20); border: none; border-radius: 3px; cursor: pointer; color: white; text-transform: uppercase; margin-left: auto; transition: background .15s; display: flex; align-items: center; gap: 5px; }
+    .sf-sum-action-primary:hover { background: var(--neutral-10); }
+
+    /* Loading state inside summary box */
+    .sf-sum-loading { padding: 14px; }
+    .sf-sum-loading-label { font-size: 11px; color: var(--neutral-50); display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .loading-spinner { width: 12px; height: 12px; border: 2px solid var(--neutral-90); border-top-color: var(--strk-teal); border-radius: 50%; animation: spin .7s linear infinite; }
+    .skel { background: linear-gradient(90deg, var(--neutral-90) 25%, var(--neutral-95) 50%, var(--neutral-90) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 3px; height: 10px; margin-bottom: 7px; }
+    .skel-h { height: 13px; width: 40%; }
+    .skel-full { width: 100%; }
+    .skel-80 { width: 82%; }
+    .skel-65 { width: 65%; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* Search + new engagement row */
+    .sf-eng-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .sf-search-box { display: flex; align-items: center; gap: 6px; background: white; border: 1px solid var(--neutral-80); border-radius: 4px; padding: 5px 10px; font-size: 11px; color: var(--neutral-50); width: 180px; }
+    .sf-new-eng-btn { font-size: 11px; font-weight: 600; padding: 6px 14px; background: var(--strk-teal); color: white; border: none; border-radius: 4px; cursor: pointer; }
+
+    /* Engagement list items */
+    .sf-eng-group { background: white; border: 1px solid var(--neutral-90); border-radius: var(--radius); overflow: hidden; margin-bottom: 8px; }
+    .sf-eng-group-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--neutral-95); border-bottom: 1px solid var(--neutral-90); cursor: pointer; }
+    .sf-eng-group-title { font-size: 12px; font-weight: 600; color: var(--neutral-20); display: flex; align-items: center; gap: 6px; }
+    .sf-eng-group-caret { font-size: 10px; color: var(--neutral-50); }
+    .sf-eng-group-badge { font-size: 10px; color: var(--neutral-50); background: white; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--neutral-80); }
+    .sf-eng-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--neutral-95); }
+    .sf-eng-item:last-child { border-bottom: none; }
+    .sf-eng-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+    .sf-eng-info { flex: 1; }
+    .sf-eng-name { font-size: 12px; font-weight: 600; color: var(--blue); cursor: pointer; }
+    .sf-eng-name:hover { text-decoration: underline; }
+    .sf-eng-meta { font-size: 10px; color: var(--neutral-70); margin-top: 1px; display: flex; gap: 8px; }
+    .sf-eng-contact { color: var(--blue); }
+    .sf-eng-date { font-size: 11px; color: var(--neutral-50); white-space: nowrap; }
+    .sf-eng-stale { font-size: 10px; font-weight: 600; color: var(--amber); }
+    .sf-eng-no-activity { font-size: 10px; font-weight: 600; color: var(--red); }
+    .sf-eng-complete { font-size: 10px; font-weight: 600; color: var(--green); }
+
+    /* Summary idle state */
+    #demo-state-idle { }
+    #demo-state-loading { display: none; }
+    #demo-state-summary { display: none; }
+
+    /* HIGHLIGHT OVERLAY */
+    .sf-highlight-bar { display: none; padding: 10px 14px; background: var(--amber-light); border-top: 1px solid #f9d89a; }
+    .sf-highlight-bar.visible { display: block; }
+    .sf-highlight-title { font-size: 11px; font-weight: 700; color: var(--amber); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
+    .sf-highlight-item { display: flex; align-items: flex-start; gap: 7px; font-size: 11px; color: var(--neutral-20); margin-bottom: 5px; line-height: 1.4; }
+    .sf-highlight-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--amber); flex-shrink: 0; margin-top: 3px; }
+    .sf-highlight-dot.red { background: var(--red); }
+
+    /* LEARNING LOOP */
+    .loop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; }
+    .loop-card { background: white; border: 1px solid var(--neutral-90); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); }
+    .loop-card h3 { font-size: 15px; font-weight: 700; color: var(--neutral-10); margin-bottom: 6px; }
+    .loop-card p { font-size: 13px; color: var(--neutral-50); margin-bottom: 16px; line-height: 1.6; }
+    .loop-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .loop-table th { background: var(--neutral-95); padding: 8px 12px; text-align: left; font-weight: 600; color: var(--neutral-50); border-bottom: 1px solid var(--neutral-90); }
+    .loop-table td { padding: 8px 12px; border-bottom: 1px solid var(--neutral-95); vertical-align: top; }
+    .loop-table tr:last-child td { border-bottom: none; }
+    .signal-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .sd-teal { background: var(--strk-teal); }
+    .sd-purple { background: var(--scout-purple); }
+    .sd-green { background: var(--green); }
+
+    /* TIMELINE — how the summary matures */
+    .maturity-timeline { display: flex; gap: 0; margin-top: 32px; position: relative; }
+    .maturity-timeline::before { content: ''; position: absolute; top: 28px; left: 60px; right: 60px; height: 2px; background: linear-gradient(90deg, var(--neutral-80), var(--strk-teal), var(--scout-purple)); z-index: 0; }
+    .mt-step { flex: 1; text-align: center; position: relative; z-index: 1; }
+    .mt-dot { width: 16px; height: 16px; border-radius: 50%; margin: 20px auto 10px; border: 2px solid white; box-shadow: 0 0 0 2px; }
+    .mt-dot-1 { background: var(--neutral-70); box-shadow: 0 0 0 2px var(--neutral-70); }
+    .mt-dot-2 { background: var(--strk-teal); box-shadow: 0 0 0 2px var(--strk-teal); }
+    .mt-dot-3 { background: var(--scout-purple); box-shadow: 0 0 0 2px var(--scout-purple); }
+    .mt-label { font-size: 11px; font-weight: 700; color: var(--neutral-20); margin-bottom: 4px; }
+    .mt-when { font-size: 10px; color: var(--neutral-70); margin-bottom: 8px; font-style: italic; }
+    .mt-desc { font-size: 11px; color: var(--neutral-50); line-height: 1.5; max-width: 160px; margin: 0 auto; }
+
+    /* WHAT TO BUILD */
+    .build-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+    .build-col h3 { font-size: 15px; font-weight: 700; color: var(--neutral-10); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--neutral-90); }
+    .build-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--neutral-95); }
+    .build-item:last-child { border-bottom: none; }
+    .build-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .bi-green { background: var(--green-light); }
+    .bi-blue { background: var(--blue-light); }
+    .bi-purple { background: var(--scout-purple-light); }
+    .bi-amber { background: var(--amber-light); }
+    .bi-teal { background: #e0f2f1; }
+    .build-item-text h4 { font-size: 12px; font-weight: 700; color: var(--neutral-10); margin-bottom: 2px; }
+    .build-item-text p { font-size: 11px; color: var(--neutral-50); line-height: 1.4; }
+    .build-status { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+    .bs-build { background: var(--blue-light); color: var(--blue-mid); }
+    .bs-extend { background: var(--amber-light); color: var(--amber); }
+    .bs-new { background: var(--scout-purple-light); color: var(--scout-purple); }
+    .bs-infra { background: #e0f2f1; color: var(--strk-teal); }
+
+    /* OPEN QUESTIONS */
+    .oq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    .oq-card { background: white; border: 1px solid var(--neutral-90); border-radius: var(--radius); padding: 16px 18px; }
+    .oq-card h4 { font-size: 12px; font-weight: 700; color: var(--neutral-10); margin-bottom: 6px; }
+    .oq-card p { font-size: 12px; color: var(--neutral-50); line-height: 1.5; }
+    .oq-options { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .oq-opt { font-size: 11px; padding: 3px 10px; border-radius: 10px; border: 1px dashed var(--neutral-70); color: var(--neutral-50); }
+
+    /* FOOTER */
+    footer { background: var(--neutral-10); color: var(--neutral-70); padding: 24px 32px; margin-top: 0; font-size: 12px; display: flex; align-items: center; justify-content: space-between; }
+    footer strong { color: white; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot">
+      <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5"/></svg>
+    </div>
+    Scout Summary
+  </div>
+  <a href="#concept">Concept</a>
+  <a href="#how">How It Works</a>
+  <a href="#scout-compass">Scout + Compass</a>
+  <a href="#demo">Demo</a>
+  <a href="#learning">How It Learns</a>
+  <a href="#build">What to Build</a>
+  <a href="#questions">Open Questions</a>
+  <div class="nav-badge">Concept Draft — May 2026</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span> Scout × Sitetracker</div>
+  <h1>One summary.<br><span>Gets smarter over time.</span></h1>
+  <p class="hero-sub">A summary component that works on day one, on any record, for any user. In the background, it learns what matters for each object — then for each person. The output always looks the same. The intelligence grows.</p>
+  <div class="hero-tags">
+    <span class="tag tag-teal">Any Salesforce Object</span>
+    <span class="tag tag-blue">Inline in the Record Page</span>
+    <span class="tag tag-purple">Scout AI Agent</span>
+    <span class="tag tag-purple">Compass Schema Intelligence</span>
+    <span class="tag tag-green">No Admin Config</span>
+    <span class="tag tag-amber">Self-Learning in the Background</span>
+  </div>
+</div>
+
+<!-- CONCEPT -->
+<section id="concept" style="background:white;">
+  <div class="page">
+    <div class="section-label">The Concept</div>
+    <h2>One surface. Intelligence that grows without you noticing.</h2>
+    <p class="section-intro">The summary never changes shape. What changes is what it knows — about the object, about you. From day one (relevant to everyone) to months in (relevant specifically to you).</p>
+
+    <div style="margin-top:40px;" class="concept-wrap">
+      <div class="concept-inner">
+        <!-- INTELLIGENCE SPECTRUM DIAGRAM -->
+        <div class="intelligence-diagram">
+          <div class="intel-ring intel-ring-outer">
+            <div class="intel-ring-label irl-outer">Relevant to everyone</div>
+            <div class="intel-ring-desc">Works immediately. Knows the object type, the record, the user's role. Surfaces what is at risk, what is stale, what needs action. No setup required.</div>
+            <span class="intel-ring-tag irt-outer">From day one</span>
+            <div class="intel-ring intel-ring-mid">
+              <div class="intel-ring-label irl-mid">Relevant to this object</div>
+              <div class="intel-ring-desc">Learns from usage. Which fields matter for Site records? Which engagements do users check first? What follow-ups are most common? Compass accumulates this automatically.</div>
+              <span class="intel-ring-tag irt-mid">After weeks of use</span>
+              <div class="intel-ring intel-ring-inner">
+                <div class="intel-ring-label irl-inner">Relevant to me</div>
+                <div class="intel-ring-desc">Personalizes to the individual. A Site Acquisition Manager sees ownership and LOI status first. Finance sees budget. Your patterns shape what comes first.</div>
+                <span class="intel-ring-tag irt-inner">After repeated use</span>
+              </div>
+            </div>
+          </div>
+          <div class="intel-axis" style="margin-top:16px;">
+            <div class="intel-axis-bar"></div>
+            <div class="intel-axis-labels">
+              <span>Generic · Fast · Always on</span>
+              <span>Personal · Precise · Earned</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOUR QUESTIONS -->
+        <div class="concept-questions">
+          <div class="cq">
+            <div class="cq-q">What makes a summary meaningful?</div>
+            <div class="cq-a"><strong>Relevance to you.</strong> A summary that tells a Finance user about acquisition negotiations is noise. One that leads with budget variance is signal. Right record + right role + right timing.</div>
+          </div>
+          <div class="cq">
+            <div class="cq-q">What if Scout hasn't seen this object type before?</div>
+            <div class="cq-a"><strong>Compass provides the schema by default.</strong> The agent reads the Compass ontology — field types, picklist values, SOQL guidance, related objects — and reasons about what matters. If Compass doesn't know the object yet, universal queries (Tasks, Chatter, Notes, Emails, Events) work on every record.</div>
+          </div>
+          <div class="cq">
+            <div class="cq-q">How does Scout know what would be meaningful to YOU?</div>
+            <div class="cq-a">From the first call, your role and profile (from Salesforce) shapes the focus. Over time, usage patterns across everyone on this object type build shared context. Eventually, your own interaction history builds a personal micro-context — fed into every future summary.</div>
+          </div>
+          <div class="cq">
+            <div class="cq-q">How does Scout have enough context to produce the summary?</div>
+            <div class="cq-a"><strong>Four inputs before a single query runs:</strong> (1) Compass ontology for this object. (2) User name, role, profile. (3) Today's date — for staleness and overdue calculations. (4) The record ID to scope all queries. Then 7+ parallel data fetches. Then synthesis.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="background:#f8f7f5;">
+  <div class="page">
+    <div class="section-label">Architecture</div>
+    <h2>What happens on a request. What happens in the background.</h2>
+    <p class="section-intro">From the user's perspective, there is one action: Refresh Summary. What runs behind that button — and what runs invisibly between sessions — is what makes the summary get better over time.</p>
+
+    <div class="how-grid">
+      <!-- ON EVERY REQUEST -->
+      <div class="how-card">
+        <div class="how-card-header">
+          <div class="how-card-icon hci-blue">⚡</div>
+          <div>
+            <div class="how-card-title">On every request</div>
+            <div class="how-card-sub">Triggered by "Refresh Summary" or on a schedule</div>
+          </div>
+        </div>
+        <div class="how-card-body">
+          <div class="how-steps">
+            <div class="how-step">
+              <div class="how-step-num">1</div>
+              <div class="how-step-text"><strong>Locate.</strong> Read objectApiName, recordId, and user role from the Salesforce platform context.</div>
+            </div>
+            <div class="how-step">
+              <div class="how-step-num">2</div>
+              <div class="how-step-text"><strong>Orient via Compass.</strong> Fetch the schema ontology for this object — fields, picklist values, SOQL guidance, related objects, and any learned context accumulated from prior use.</div>
+            </div>
+            <div class="how-step">
+              <div class="how-step-num">3</div>
+              <div class="how-step-text"><strong>Fan out 7+ parallel queries.</strong> Record fields, Tasks, Chatter, Notes, Emails, Events, object-specific relations — all at once.</div>
+            </div>
+            <div class="how-step">
+              <div class="how-step-num">4</div>
+              <div class="how-step-text"><strong>Synthesize.</strong> LLM reads all data plus any user-specific or object-specific context that has accumulated. Writes the structured summary and 3–5 suggested follow-up prompts.</div>
+            </div>
+            <div class="how-step">
+              <div class="how-step-num">5</div>
+              <div class="how-step-text"><strong>Deliver inline.</strong> Summary renders in the record page. Prompts appear as action chips. User can continue with Scout for a full session.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IN THE BACKGROUND -->
+      <div class="how-card">
+        <div class="how-card-header">
+          <div class="how-card-icon hci-purple">🔄</div>
+          <div>
+            <div class="how-card-title">In the background</div>
+            <div class="how-card-sub">Runs on a schedule — not visible to the user</div>
+          </div>
+        </div>
+        <div class="how-card-body">
+          <div class="schedule-badge">Scheduled — weekly or fortnightly</div>
+          <div class="how-steps">
+            <div class="how-step">
+              <div class="how-step-num">1</div>
+              <div class="how-step-text"><strong>Analyze execution history.</strong> A background agent queries traces filtered by object type — which fields appeared in the best summaries, which action chips users clicked.</div>
+            </div>
+            <div class="how-step">
+              <div class="how-step-num">2</div>
+              <div class="how-step-text"><strong>Update the Compass ontology.</strong> Writes a <em>tuneHeader</em> to the object's Compass document: "For Site records, users consistently need ownership status and LOI timeline first." Every future summary inherits this automatically.</div>
+            </div>
+            <div class="how-step">
+              <div class="how-step-num">3</div>
+              <div class="how-step-text"><strong>Build user context.</strong> After enough interactions per user, a personalization agent reads their trace and feedback history, writes a <em>user_context</em> block into Mission defaults — shaping the tone, order, and focus of their next summary.</div>
+            </div>
+            <div class="how-step">
+              <div class="how-step-num">4</div>
+              <div class="how-step-text"><strong>No action needed.</strong> The next time the user refreshes, the summary is measurably better. No config. No re-training. No prompt engineering by admins.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCOUT + COMPASS -->
+<section id="scout-compass" style="background:white;">
+  <div class="page">
+    <div class="section-label">Under the Hood</div>
+    <h2>How Scout and Compass work together.</h2>
+    <p class="section-intro">Every summary runs a Scout graph — a directed pipeline of typed nodes. Compass is the schema intelligence layer that tells the graph what each Salesforce object means. Together they replace what would otherwise need custom configuration per object.</p>
+
+    <div class="sc-grid">
+
+      <!-- LEFT: SCOUT GRAPH -->
+      <div class="sc-panel">
+        <div class="sc-panel-title">
+          <span class="sc-panel-title-badge scpb-scout">Scout</span>
+          Universal Summary Graph — execution flow
+        </div>
+
+        <div class="graph-inputs">
+          <span class="graph-input-chip">record_id</span>
+          <span class="graph-input-chip">object_api_name</span>
+          <span class="graph-input-chip">user_role</span>
+          <span class="graph-input-chip" style="opacity:.55;">user_context?</span>
+        </div>
+        <div class="graph-arrow">↓</div>
+
+        <div class="graph-node gn-context">
+          <span class="graph-node-badge gnb-context">context_builder</span>
+          <div class="graph-node-text">
+            <div class="graph-node-name">Build execution context</div>
+            <div class="graph-node-desc">Injects <em>today's date</em>, user name, role, and profile from Salesforce. These are available as <code style="font-size:9px;background:var(--neutral-90);padding:1px 4px;border-radius:2px;">{{user.*}}</code> variables in all downstream nodes.</div>
+          </div>
+        </div>
+        <div class="graph-arrow">↓</div>
+
+        <div class="graph-node gn-compass" style="position:relative;">
+          <span class="graph-node-badge gnb-compass">compass_query</span>
+          <div class="graph-node-text">
+            <div class="graph-node-name">Fetch object ontology from Compass</div>
+            <div class="graph-node-desc">Sends <em>object_api_name</em> to Compass. Returns a context bundle — field labels, picklist values, SOQL guidance, related objects, and the <em>tuneHeader</em> (learned patterns). Up to 50 k tokens injected into the LLM prompt.</div>
+          </div>
+        </div>
+
+        <div class="compass-connect">
+          <div style="width:18px;border-top:2px dashed #bfdbfe;"></div>
+          <div style="font-size:9px;color:var(--blue);font-weight:600;white-space:nowrap;padding:0 4px;">reads Compass ontology →</div>
+          <div style="flex:1;border-top:2px dashed #bfdbfe;"></div>
+          <div style="font-size:9px;color:var(--blue);padding-left:4px;">see right panel</div>
+        </div>
+
+        <div class="graph-node gn-fanout">
+          <span class="graph-node-badge gnb-fanout">parallel_fan_out</span>
+          <div class="graph-node-text">
+            <div class="graph-node-name">Launch all queries at once</div>
+            <div class="graph-node-desc"><em>join_policy: all_settled</em> — never fails on empty data. Each branch result is annotated. All run in parallel.</div>
+          </div>
+        </div>
+
+        <div class="graph-cluster">
+          <div class="graph-cluster-label">Parallel salesforce_query branches</div>
+          <div class="graph-cluster-grid">
+            <div class="graph-node gn-query" style="margin-bottom:0;">
+              <div class="graph-node-text">
+                <div class="graph-node-name" style="font-size:10px;">Record fields</div>
+                <div class="graph-node-desc">All key fields via Compass SOQL guidance for this object</div>
+              </div>
+            </div>
+            <div class="graph-node gn-query" style="margin-bottom:0;">
+              <div class="graph-node-text">
+                <div class="graph-node-name" style="font-size:10px;">Tasks</div>
+                <div class="graph-node-desc">WhatId = record_id, open + overdue</div>
+              </div>
+            </div>
+            <div class="graph-node gn-query" style="margin-bottom:0;">
+              <div class="graph-node-text">
+                <div class="graph-node-name" style="font-size:10px;">Chatter + Notes</div>
+                <div class="graph-node-desc">ParentId = record_id, last 30 days</div>
+              </div>
+            </div>
+            <div class="graph-node gn-query" style="margin-bottom:0;">
+              <div class="graph-node-text">
+                <div class="graph-node-name" style="font-size:10px;">Emails + Events</div>
+                <div class="graph-node-desc">WhatId = record_id, recent activity</div>
+              </div>
+            </div>
+            <div class="graph-node gn-query" style="margin-bottom:0;grid-column:span 2;">
+              <div class="graph-node-text">
+                <div class="graph-node-name" style="font-size:10px;">Object-specific relations</div>
+                <div class="graph-node-desc">Compass-guided child queries — e.g. Engagements for Site, Milestones for Project</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="graph-node gn-join">
+          <span class="graph-node-badge gnb-join">parallel_join</span>
+          <div class="graph-node-text">
+            <div class="graph-node-name">Merge all query results</div>
+            <div class="graph-node-desc">Waits for all settled branches. Assembles a unified data context for the LLM. Empty branches are gracefully omitted.</div>
+          </div>
+        </div>
+        <div class="graph-arrow">↓</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px;">
+          <div class="graph-node gn-llm" style="margin-bottom:0;">
+            <div class="graph-node-text">
+              <span class="graph-node-badge gnb-llm" style="margin-bottom:4px;display:inline-block;">llm_call</span>
+              <div class="graph-node-name" style="font-size:10px;">Synthesize summary</div>
+              <div class="graph-node-desc">Reads all data + Compass context + user_context. Writes structured brief: risks, activity, next steps.</div>
+            </div>
+          </div>
+          <div class="graph-node gn-llm" style="margin-bottom:0;">
+            <div class="graph-node-text">
+              <span class="graph-node-badge gnb-llm" style="margin-bottom:4px;display:inline-block;">llm_call</span>
+              <div class="graph-node-name" style="font-size:10px;">Generate prompts</div>
+              <div class="graph-node-desc">Reads same context. Produces 3–5 follow-up action chips tailored to this record's state.</div>
+            </div>
+          </div>
+        </div>
+        <div class="graph-arrow">↓</div>
+
+        <div class="graph-node gn-emit">
+          <span class="graph-node-badge gnb-emit">emit_artifact</span>
+          <div class="graph-node-text">
+            <div class="graph-node-name">Return to Salesforce</div>
+            <div class="graph-node-desc">Writes <em>summary_markdown</em> + <em>suggested_prompts[]</em> to the execution state. Apex controller parses and returns to LWC for rendering.</div>
+          </div>
+        </div>
+        <div class="graph-arrow" style="margin-bottom:4px;">↓</div>
+
+        <div class="graph-output">
+          <span class="graph-output-chip">summary_markdown</span>
+          <span class="graph-output-chip">suggested_prompts[ ]</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: COMPASS -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <div class="sc-panel">
+          <div class="sc-panel-title">
+            <span class="sc-panel-title-badge scpb-compass">Compass</span>
+            What the ontology document contains
+          </div>
+
+          <div class="compass-object-card">
+            <div class="compass-object-header">
+              <span class="compass-object-name">strk__Site__c</span>
+              <span class="compass-object-layer">Layer 2 — Surveyed</span>
+            </div>
+            <div class="compass-object-body">
+              <div class="compass-field-row">
+                <div class="compass-field-name">strk__Acquisition_Stage__c</div>
+                <div class="compass-field-detail"><span class="compass-field-type">Picklist</span>Values: Prospecting, LOI Review, Under Contract, Closed. SOQL tip: filter stale if not updated in 14d.</div>
+              </div>
+              <div class="compass-field-row">
+                <div class="compass-field-name">strk__Landowner__c</div>
+                <div class="compass-field-detail"><span class="compass-field-type">Lookup → Contact</span>Always surface in ownership context. Query related Engagements WHERE strk__Contact__c = this field.</div>
+              </div>
+              <div class="compass-field-row">
+                <div class="compass-field-name">strk__LOI_Target_Date__c</div>
+                <div class="compass-field-detail"><span class="compass-field-type">Date</span>Compare to TODAY(). If &lt; 14 days and stage is LOI Review, flag as urgent risk.</div>
+              </div>
+              <div class="compass-field-row">
+                <div class="compass-field-name">strk__Engagements__r</div>
+                <div class="compass-field-detail"><span class="compass-field-type">Child relation</span>Key related list. Query top 5 by LastModifiedDate. Surface stale engagements (no activity 10+ days).</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="compass-tune-header" id="tune-header-panel">
+            <div class="compass-tune-title">
+              tuneHeader
+              <span>written by Object Learning Graph</span>
+              <span class="tune-toggle" onclick="toggleTune()">toggle state</span>
+            </div>
+            <div id="tune-empty" class="compass-tune-empty">Empty on day one — fills automatically after the object learning graph runs for the first time.</div>
+            <div id="tune-filled" class="compass-tune-filled" style="display:none;">
+              "For strk__Site__c summaries: users consistently need <strong>landowner status</strong> and <strong>LOI timeline</strong> first. Stale engagements (10+ days no contact) are the most-clicked risk signal. Follow-up prompts around 'draft outreach' and 'who owns zoning' are used most. Finance users re-read budget compliance sections."
+            </div>
+          </div>
+
+          <div class="compass-query-return" style="margin-top:12px;">
+            <div class="cqr-title">What compass_query returns to the graph</div>
+            <div class="cqr-item">Field labels, picklist values, and SOQL-safe query guidance for every relevant field</div>
+            <div class="cqr-item">Related object names and recommended join patterns (e.g. Engagements → Contact)</div>
+            <div class="cqr-item">Object-level SOQL advice — which filters surface meaningful data vs noise</div>
+            <div class="cqr-item">The tuneHeader (empty early on; enriched over time by the learning graph)</div>
+            <div class="cqr-item">All injected as a context bundle into the LLM system prompt — up to 50 k tokens</div>
+          </div>
+        </div>
+
+        <div class="sc-panel">
+          <div class="sc-panel-title">
+            <span class="sc-panel-title-badge scpb-compass">Compass</span>
+            Ontology layers — where STRK objects sit today
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--blue-light);border-radius:6px;border:1px solid #b8d9f5;">
+              <div style="width:32px;height:32px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">1</div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--blue-mid);">Layer 1 — Full knowledge</div>
+                <div style="font-size:10px;color:var(--blue-mid);opacity:.8;">Account, Opportunity, Contact, Case — deepest ontology, semantic field understanding</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#f0fdf4;border-radius:6px;border:1px solid #bbf7d0;">
+              <div style="width:32px;height:32px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">2</div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--green);">Layer 2 — Surveyed</div>
+                <div style="font-size:10px;color:var(--green);opacity:.8;">strk2__stf_* objects surveyed today. <strong>strk__Site__c, Engagement, Project need Magellan survey</strong> — this is the infrastructure task.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--neutral-95);border-radius:6px;border:1px solid var(--neutral-80);">
+              <div style="width:32px;height:32px;border-radius:8px;background:var(--neutral-70);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:white;">3</div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--neutral-50);">Layer 3 — Stub</div>
+                <div style="font-size:10px;color:var(--neutral-70);">Schema only — field names and types but no SOQL guidance or semantic context. Summaries fall back to universal queries.</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding:10px 12px;background:var(--amber-light);border:1px solid #f9d89a;border-radius:6px;font-size:11px;color:var(--amber);line-height:1.5;">
+            <strong>Current gap:</strong> Core STRK objects (strk__Site__c, strk__Engagement__c, strk__Project__c) are at Layer 3. The Compass Survey infrastructure task elevates them to Layer 2 — unlocking field-rich, SOQL-guided summaries for these objects.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section id="demo" style="background:white;">
+  <div class="page">
+    <div class="section-label">Live Demo</div>
+    <h2>See it on a record page.</h2>
+    <p class="section-intro">The summary sits inline within the record page — shown here in the Engagements section of a Site record. Click Refresh Summary to generate. Click "Highlight What's at Risk" to drill in.</p>
+
+    <div class="demo-shell">
+
+      <!-- TOP BAR -->
+      <div class="sf-topbar">
+        <div class="sf-topbar-left">
+          <div>
+            <div class="sf-record-type">Area</div>
+            <div class="sf-record-name">Parcel of a Project</div>
+          </div>
+        </div>
+        <div class="sf-topbar-actions">
+          <button class="sf-action-btn">+ Follow</button>
+          <button class="sf-action-btn">Clone</button>
+          <button class="sf-action-btn">Delete</button>
+          <button class="sf-ask-scout-btn">
+            <svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="5"/></svg>
+            ASK SCOUT
+          </button>
+        </div>
+      </div>
+
+      <!-- META STRIP -->
+      <div class="sf-meta-strip">
+        <div class="sf-meta-item">
+          <div class="sf-meta-label">Site Type</div>
+          <div class="sf-meta-value">Solar PV Plant</div>
+        </div>
+        <div class="sf-meta-item">
+          <div class="sf-meta-label">Site Status</div>
+          <div class="sf-meta-value">On Air</div>
+        </div>
+        <div class="sf-meta-item">
+          <div class="sf-meta-label">Full Address</div>
+          <div class="sf-meta-value">10 Executive Drive, Farmington, CT-6032</div>
+        </div>
+      </div>
+
+      <!-- STATUS PIPELINE -->
+      <div class="sf-pipeline">
+        <div class="sf-stage sf-stage-done">Requested</div>
+        <div class="sf-stage sf-stage-active">Draft</div>
+        <div class="sf-stage sf-stage-todo">Active</div>
+        <div class="sf-stage sf-stage-todo">Expired</div>
+        <div class="sf-stage sf-stage-todo">Terminated</div>
+        <div class="sf-stage sf-stage-todo">Cancelled</div>
+      </div>
+
+      <!-- TAB BAR -->
+      <div class="sf-tabs">
+        <div class="sf-tab">Details</div>
+        <div class="sf-tab">Stakeholder</div>
+        <div class="sf-tab">Agreement Central</div>
+        <div class="sf-tab">Work</div>
+        <div class="sf-tab">Files</div>
+        <div class="sf-tab sf-tab-active">Engagements</div>
+        <div class="sf-tab">More ▾</div>
+      </div>
+
+      <!-- CONTENT AREA -->
+      <div class="sf-content">
+
+        <!-- Section header -->
+        <div class="sf-section-header">
+          <div class="sf-section-title">All Stakeholder Engagement</div>
+          <button class="sf-refresh-btn" id="refresh-btn" onclick="runRefresh()">
+            <svg viewBox="0 0 16 16" fill="currentColor" id="refresh-icon"><path d="M13.5 2.5A6.5 6.5 0 0 0 2 8h1.5A5 5 0 0 1 13 4.5V6l2.5-2.5L13 1v1.5zM14 8a5 5 0 0 1-10 0H2.5a6.5 6.5 0 0 0 12 2.5L12 8h2z"/></svg>
+            Refresh Summary
+          </button>
+        </div>
+
+        <!-- SUMMARY BOX -->
+        <div class="sf-summary-box">
+
+          <!-- IDLE state -->
+          <div id="demo-state-idle" style="padding:12px 14px;text-align:center;">
+            <div style="font-size:11px;color:var(--neutral-50);margin-bottom:10px;line-height:1.5;">Scout will read the schema, fetch record data and all related activity, then generate a structured summary with action prompts.</div>
+            <button style="font-size:11px;font-weight:600;padding:7px 16px;background:var(--strk-teal);color:white;border:none;border-radius:4px;cursor:pointer;" onclick="runRefresh()">Generate Summary</button>
+          </div>
+
+          <!-- LOADING state -->
+          <div id="demo-state-loading" class="sf-sum-loading" style="display:none;">
+            <div class="sf-sum-loading-label"><div class="loading-spinner"></div>Reading schema &amp; fetching 7 sources in parallel…</div>
+            <div class="skel skel-h"></div>
+            <div class="skel skel-full"></div>
+            <div class="skel skel-80"></div>
+            <div class="skel skel-65"></div>
+            <div style="height:6px;"></div>
+            <div class="skel skel-h" style="width:35%;"></div>
+            <div class="skel skel-full"></div>
+            <div class="skel skel-80"></div>
+          </div>
+
+          <!-- SUMMARY state -->
+          <div id="demo-state-summary" style="display:none;">
+            <div class="sf-sum-meta">
+              <div class="sf-sum-meta-left">
+                <div class="sf-sum-meta-dot"></div>
+                Summary &nbsp;·&nbsp; 12th Oct 2026 &nbsp;·&nbsp; 2 sec ago
+              </div>
+              <div class="sf-sum-meta-right">
+                <span class="sf-sum-version">V12</span>
+                <span class="sf-sum-hide">Hide</span>
+              </div>
+            </div>
+            <div class="sf-sum-body">
+              <div class="sf-sum-label">Condensed Summary</div>
+              <div class="sf-sum-text">
+                <a>Richard Morrison</a> (Morrison Family Trust) has been receptive throughout the acquisition process. He expressed cautious optimism in the last call, noting he is open to a solar lease provided terms protect the eastern tree line. <a>Patricia Chen</a> remains neutral — no objections raised but has not yet engaged substantively with lease terms. <a>James T. Morrison (Morrison Tract)</a> continues to push back on rate per acre and is requesting a third-party appraisal before proceeding.
+              </div>
+            </div>
+
+            <!-- HIGHLIGHT PANEL -->
+            <div class="sf-highlight-bar" id="highlight-bar">
+              <div class="sf-highlight-title">What's at risk</div>
+              <div class="sf-highlight-item"><div class="sf-highlight-dot red"></div>James T. Morrison blocking on rate per acre — appraisal request unresolved</div>
+              <div class="sf-highlight-item"><div class="sf-highlight-dot red"></div>Patricia Chen has not engaged with lease terms — no follow-up scheduled</div>
+              <div class="sf-highlight-item"><div class="sf-highlight-dot"></div>LOI target date is 18 days away — no active negotiation with two of three stakeholders</div>
+            </div>
+
+            <div class="sf-sum-actions">
+              <button class="sf-sum-action-sec" onclick="toggleHighlight()">Highlight what's at risk</button>
+              <button class="sf-sum-action-sec" onclick="alert('Showing fields not updated in 14+ days…')">What has not been updated recently</button>
+              <button class="sf-sum-action-primary" onclick="alert('Opening Scout session with this record context…')">Continue with Scout &nbsp;→</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ENGAGEMENT TOOLBAR -->
+        <div class="sf-eng-toolbar">
+          <div class="sf-search-box">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" style="color:var(--neutral-70);"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="11" y1="11" x2="14" y2="14" stroke="currentColor" stroke-width="2"/></svg>
+            Search Engagements
+          </div>
+          <button class="sf-new-eng-btn">New Engagement</button>
+        </div>
+
+        <!-- UPCOMING/OVERDUE GROUP -->
+        <div class="sf-eng-group">
+          <div class="sf-eng-group-header">
+            <div class="sf-eng-group-title"><span class="sf-eng-group-caret">▶</span> Upcoming/Overdue</div>
+            <span class="sf-eng-group-badge">Next 7 days ▾</span>
+          </div>
+          <div class="sf-eng-item">
+            <div class="sf-eng-icon">👥</div>
+            <div class="sf-eng-info">
+              <div class="sf-eng-name">Permit discussion with Dave Torres</div>
+              <div class="sf-eng-meta">
+                <span class="sf-eng-contact">Dave Torres</span>
+                <span>Community Contact – Local Judge</span>
+                <span>Site Name</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="sf-eng-date">Apr 16th, 2026</div>
+            </div>
+          </div>
+          <div class="sf-eng-item">
+            <div class="sf-eng-icon">👥</div>
+            <div class="sf-eng-info">
+              <div class="sf-eng-name">Lease negotiation with Mike Wallace</div>
+              <div class="sf-eng-meta">
+                <span class="sf-eng-contact">Mike Wallace</span>
+                <span>Community Contact – Local Judge</span>
+                <span>Site Name</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="sf-eng-date">Apr 16th, 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAST GROUP -->
+        <div class="sf-eng-group">
+          <div class="sf-eng-group-header">
+            <div class="sf-eng-group-title"><span class="sf-eng-group-caret">▶</span> Past</div>
+          </div>
+          <div class="sf-eng-item">
+            <div class="sf-eng-icon">👥</div>
+            <div class="sf-eng-info">
+              <div class="sf-eng-name">Call with Richard Morrison</div>
+              <div class="sf-eng-meta">
+                <span class="sf-eng-contact">Richard Morrison</span>
+                <span>Community Contact – Local Judge</span>
+                <span>Site Name</span>
+              </div>
+            </div>
+            <div class="sf-eng-date">Apr 16th, 2026</div>
+          </div>
+          <div class="sf-eng-item">
+            <div class="sf-eng-icon">👥</div>
+            <div class="sf-eng-info">
+              <div class="sf-eng-name">Contract renewal with Richard Morrison <span style="font-size:10px;font-weight:600;background:var(--green-light);color:var(--green);padding:1px 7px;border-radius:10px;margin-left:4px;">Positive</span></div>
+              <div class="sf-eng-meta">
+                <span class="sf-eng-contact">Richard Morrison</span>
+                <span>Community Contact – Local Judge</span>
+                <span>Site Name</span>
+              </div>
+            </div>
+            <div class="sf-eng-date">Apr 16th, 2026</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT LEARNS -->
+<section id="learning" style="background:#f8f7f5;">
+  <div class="page">
+    <div class="section-label">How It Learns</div>
+    <h2>The same output. Growing intelligence.</h2>
+    <p class="section-intro">The user never sees the learning happen. What they see is the summary getting progressively more useful — leading with the right things, surfacing the right risks, suggesting the right follow-ups. Here is what runs in the background to make that happen.</p>
+
+    <!-- MATURITY TIMELINE -->
+    <div style="background:white;border:1px solid var(--neutral-90);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow-sm);margin-top:32px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral-50);margin-bottom:4px;">Summary maturity over time</div>
+      <div style="font-size:13px;color:var(--neutral-50);margin-bottom:8px;">The UI never changes. The relevance does.</div>
+      <div class="maturity-timeline">
+        <div class="mt-step">
+          <div class="mt-dot mt-dot-1"></div>
+          <div class="mt-label">Day 1</div>
+          <div class="mt-when">First use</div>
+          <div class="mt-desc">Role-aware summary. Knows the schema, surfaces risks, suggests next steps. Useful immediately.</div>
+        </div>
+        <div class="mt-step">
+          <div class="mt-dot mt-dot-2"></div>
+          <div class="mt-label">Week 2–4</div>
+          <div class="mt-when">After N team summaries</div>
+          <div class="mt-desc">Object patterns emerge. Compass learns what fields matter most for this object type. Suggested prompts become specific.</div>
+        </div>
+        <div class="mt-step">
+          <div class="mt-dot mt-dot-3"></div>
+          <div class="mt-label">Month 2+</div>
+          <div class="mt-when">After M personal interactions</div>
+          <div class="mt-desc">User context builds. The summary leads with what you care about, in the order you prefer it, using your vocabulary.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="loop-grid" style="margin-top:24px;">
+      <!-- OBJECT LEARNING -->
+      <div class="loop-card">
+        <h3>Object-level learning — shared by everyone</h3>
+        <p>A scheduled background agent analyzes how the summary has been used across all users for a given object type. What it learns gets written into the Compass ontology for that object — benefiting every future summary, for every user.</p>
+        <table class="loop-table">
+          <thead>
+            <tr><th>Signal</th><th>What it captures</th><th>Where stored</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="signal-dot sd-teal"></span>Execution trace</td>
+              <td>Which fields appeared in rich vs sparse summaries</td>
+              <td>Scout Trace Store</td>
+            </tr>
+            <tr>
+              <td><span class="signal-dot sd-teal"></span>Prompt clicks</td>
+              <td>Which action chips users actually follow through on</td>
+              <td>Scout Feedback</td>
+            </tr>
+            <tr>
+              <td><span class="signal-dot sd-teal"></span>Summary ratings</td>
+              <td>👍 / 👎 per summary, linked to object type</td>
+              <td>Scout Feedback</td>
+            </tr>
+            <tr>
+              <td><span class="signal-dot sd-green"></span>tuneHeader update</td>
+              <td>"For Site records: lead with ownership, LOI timeline, and stale engagements"</td>
+              <td>Compass Ontology</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- USER LEARNING -->
+      <div class="loop-card">
+        <h3>User-level learning — personal to you</h3>
+        <p>After a user has generated enough summaries, a personalization agent builds a persistent model of what they care about. This gets stored in their Mission context and injected into every future summary they receive.</p>
+        <table class="loop-table">
+          <thead>
+            <tr><th>Signal</th><th>What it captures</th><th>Where stored</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="signal-dot sd-purple"></span>userId traces</td>
+              <td>Which sections this user revisits, what they re-read</td>
+              <td>Scout Trace (userId)</td>
+            </tr>
+            <tr>
+              <td><span class="signal-dot sd-purple"></span>Follow-up patterns</td>
+              <td>What questions this user always asks next</td>
+              <td>Scout Thread History</td>
+            </tr>
+            <tr>
+              <td><span class="signal-dot sd-purple"></span>Section ratings</td>
+              <td>Which sections are marked helpful or dismissed</td>
+              <td>Scout Feedback</td>
+            </tr>
+            <tr>
+              <td><span class="signal-dot sd-green"></span>user_context update</td>
+              <td>"Finance Analyst. Always needs budget variance and overdue payments first."</td>
+              <td>Mission inputDefaults</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT TO BUILD -->
+<section id="build" style="background:white;">
+  <div class="page">
+    <div class="section-label">What to Build</div>
+    <h2>Scope breakdown.</h2>
+    <p class="section-intro">What is Salesforce-side, what is Scout-side, and what infrastructure needs to be set up first.</p>
+
+    <div class="build-grid">
+      <div class="build-col">
+        <h3>Salesforce (LWC + Apex)</h3>
+        <div class="build-item">
+          <div class="build-icon bi-blue">⚡</div>
+          <div class="build-item-text">
+            <h4>c-st-scout-summary (LWC)</h4>
+            <p>Embedded inline in the record page. Accepts @api recordId + @api objectApiName from the platform. Renders the summary, action chips, and follow-up entry point inline. Droppable on any flexipage via Lightning App Builder.</p>
+            <span class="build-status bs-build">Build new</span>
+          </div>
+        </div>
+        <div class="build-item">
+          <div class="build-icon bi-blue">🔧</div>
+          <div class="build-item-text">
+            <h4>StScoutSummaryController (Apex)</h4>
+            <p>@AuraEnabled controller. Uses Schema.describeSObjects for field context. HTTP callout to Scout API using the StAppConfigKey credential pattern (same as StSlackAPI.cls). Returns summary text and suggested prompts.</p>
+            <span class="build-status bs-build">Build new</span>
+          </div>
+        </div>
+        <div class="build-item">
+          <div class="build-icon bi-amber">🔑</div>
+          <div class="build-item-text">
+            <h4>Sitetracker_API_Keys.SCOUT_API_KEY</h4>
+            <p>Custom metadata record in the existing Sitetracker_API_Keys__mdt type. Identical pattern to SLACK_API_KEY already in the codebase.</p>
+            <span class="build-status bs-extend">Extend existing</span>
+          </div>
+        </div>
+        <div class="build-item">
+          <div class="build-icon bi-amber">📋</div>
+          <div class="build-item-text">
+            <h4>StScoutLearningScheduler (Apex Scheduler)</h4>
+            <p>Scheduled Apex job that triggers the background learning graphs on a weekly or fortnightly cadence, per active object type. This is what makes the summary get smarter without anyone doing anything.</p>
+            <span class="build-status bs-build">Build new</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-col">
+        <h3>Scout Platform (Graphs + Compass)</h3>
+        <div class="build-item">
+          <div class="build-icon bi-purple">🗂</div>
+          <div class="build-item-text">
+            <h4>Universal Summary Graph</h4>
+            <p>New graph: context_builder → compass_query → parallel_fan_out (7 queries) → parallel_join → llm_call (summarize + prompts) → emit_artifact. Accepts record_id, object_api_name, user_role, and optional user_context. Produces the summary and suggested prompts.</p>
+            <span class="build-status bs-new">New graph</span>
+          </div>
+        </div>
+        <div class="build-item">
+          <div class="build-icon bi-purple">🧠</div>
+          <div class="build-item-text">
+            <h4>Object Learning Graph</h4>
+            <p>Background graph: receives object_api_name → queries recent traces → llm_call to extract patterns → writes a tuneHeader to the Compass ontology for that object → refreshes suggested prompts. Run on a schedule by the Apex scheduler.</p>
+            <span class="build-status bs-new">New graph</span>
+          </div>
+        </div>
+        <div class="build-item">
+          <div class="build-icon bi-purple">👤</div>
+          <div class="build-item-text">
+            <h4>User Personalization Graph</h4>
+            <p>Background graph: queries traces and feedback by userId → llm_call to build user_context string → stores in Mission inputDefaults. Invoked by the scheduler per user-object combination after enough interactions.</p>
+            <span class="build-status bs-new">New graph</span>
+          </div>
+        </div>
+        <div class="build-item">
+          <div class="build-icon bi-teal">📡</div>
+          <div class="build-item-text">
+            <h4>Compass Survey — STRK Objects</h4>
+            <p>Add a STRK-enabled org as a Compass connector policy. Run Magellan survey to elevate strk__Site__c, strk__Engagement__c, strk__Project__c from stub (layer 3) to fully surveyed (layer 2). Required for field-rich summaries on core STRK objects.</p>
+            <span class="build-status bs-infra">Infrastructure</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN QUESTIONS -->
+<section id="questions" style="background:#f8f7f5;">
+  <div class="page">
+    <div class="section-label">Open Questions</div>
+    <h2>Decisions before we build.</h2>
+    <p class="section-intro">A few things to decide before implementation starts. These affect scope and architecture — not feasibility.</p>
+
+    <div class="oq-grid">
+      <div class="oq-card">
+        <h4>1. Schedule or on-demand?</h4>
+        <p>Does the summary generate automatically on a schedule (e.g. daily, so the user always sees a fresh summary on open) — or only when the user clicks Refresh? Auto-schedule feels more ambient but adds background compute per record.</p>
+        <div class="oq-options">
+          <span class="oq-opt">On-demand only</span>
+          <span class="oq-opt">Daily scheduled refresh</span>
+          <span class="oq-opt">On-demand + staleness indicator</span>
+        </div>
+      </div>
+      <div class="oq-card">
+        <h4>2. Where does it live in the UI?</h4>
+        <p>The screenshot shows it embedded inline in the Engagements section. It could also live in a right-column sidebar component, or in a dedicated Summary tab. Each changes what the user's eye hits first.</p>
+        <div class="oq-options">
+          <span class="oq-opt">Inline in Engagements tab</span>
+          <span class="oq-opt">Right column component</span>
+          <span class="oq-opt">Dedicated Summary tab</span>
+        </div>
+      </div>
+      <div class="oq-card">
+        <h4>3. What does "Continue with Scout" open?</h4>
+        <p>Should the CTA open a full Scout chat session (in a modal or new page) with this record pre-loaded as context? Or does an inline chat appear below the summary, staying within the record page?</p>
+        <div class="oq-options">
+          <span class="oq-opt">Inline follow-up chat</span>
+          <span class="oq-opt">Opens Scout modal session</span>
+          <span class="oq-opt">Opens Scout in a new tab</span>
+        </div>
+      </div>
+      <div class="oq-card">
+        <h4>4. Pilot object</h4>
+        <p>Which object gets the first full experience — including Compass survey, object learning graph, and personalization? This determines what Magellan survey to prioritize and what training data to build first.</p>
+        <div class="oq-options">
+          <span class="oq-opt">strk__Site__c</span>
+          <span class="oq-opt">strk__Engagement__c</span>
+          <span class="oq-opt">strk__Project__c</span>
+          <span class="oq-opt">Account</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div><strong>Scout Summary</strong> — Concept Draft · May 2026</div>
+  <div>Scout × Sitetracker · Built with Scout AI Platform + Compass + LWC</div>
+</footer>
+
+<script>
+  let highlightVisible = false;
+  let demoState = 'idle'; // idle | loading | summary
+
+  function runRefresh() {
+    if (demoState === 'loading') return;
+
+    const btn = document.getElementById('refresh-btn');
+    const icon = document.getElementById('refresh-icon');
+
+    // Show loading
+    demoState = 'loading';
+    btn.classList.add('spinning');
+    document.getElementById('demo-state-idle').style.display = 'none';
+    document.getElementById('demo-state-summary').style.display = 'none';
+    document.getElementById('demo-state-loading').style.display = 'block';
+    document.getElementById('highlight-bar').classList.remove('visible');
+    highlightVisible = false;
+
+    setTimeout(() => {
+      btn.classList.remove('spinning');
+      document.getElementById('demo-state-loading').style.display = 'none';
+      document.getElementById('demo-state-summary').style.display = 'block';
+      demoState = 'summary';
+    }, 2600);
+  }
+
+  function toggleTune() {
+    const empty = document.getElementById('tune-empty');
+    const filled = document.getElementById('tune-filled');
+    if (empty.style.display === 'none') {
+      empty.style.display = 'block';
+      filled.style.display = 'none';
+    } else {
+      empty.style.display = 'none';
+      filled.style.display = 'block';
+    }
+  }
+
+  function toggleHighlight() {
+    highlightVisible = !highlightVisible;
+    const bar = document.getElementById('highlight-bar');
+    if (highlightVisible) {
+      bar.classList.add('visible');
+    } else {
+      bar.classList.remove('visible');
+    }
+  }
+</script>
+
+</body>
+</html>
